@@ -44,6 +44,7 @@ shinyServer(function(input, output) {
   }, height=800)
 
   output$Trees <- renderPlot({
+    names(AllAvgSds)[8] = "READsd"
     
     eMeans <- AllAvgSds[[paste0(input$subject, "avg")]][input$variable,]
     eSd    <- AllAvgSds[[paste0(input$subject, "sd")]][input$variable,]
