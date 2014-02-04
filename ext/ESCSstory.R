@@ -22,6 +22,8 @@ dp2012 <- density(student2012p$ESCS, weights=student2012p$W_FSTUWT, bw=.1, from=
 dg2012 <- density(student2012g$ESCS, weights=student2012g$W_FSTUWT, bw=.1, from=-3, to=3)
 
 
+student2012p <- na.omit(student2012[student2012$OECD == "OECD",c("ESCS","W_FSTUWT")])
+dp2012 <- density(student2012p$ESCS, weights=student2012p$W_FSTUWT, bw=.01, from=-3, to=3)
 
 #
 # graphs
