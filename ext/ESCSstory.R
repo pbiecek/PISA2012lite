@@ -28,13 +28,23 @@ dg2012 <- density(student2012g$ESCS, weights=student2012g$W_FSTUWT, bw=.1, from=
 #
 
 
-
+png("POL2003.png", 720, 300)
+par(mar=c(5,0,5,0))
 plot(dp2003$x, dp2003$y/sum(dp2003$y), type="s", col="black", xlab="ESCS", bty="n", yaxt="n", ylab="", lwd=2, main="Polska 2003")
+dev.off()
+png("POL2009.png", 720, 300)
+par(mar=c(5,0,5,0))
 plot(dp2009$x, dp2009$y/sum(dp2009$y), type="s", col="black", xlab="ESCS", bty="n", yaxt="n", ylab="", lwd=2, main="Polska 2009")
+dev.off()
+png("POL2012.png", 720, 300)
+par(mar=c(5,0,5,0))
 plot(dp2012$x, dp2012$y/sum(dp2012$y), type="s", col="black", xlab="ESCS", bty="n", yaxt="n", ylab="", lwd=2, main="Polska 2012")
+dev.off()
 
 
 
+png("POL2012.png", 720, 300)
+par(mar=c(5,0,5,0))
 plot(dp2009$x, dp2009$y/sum(dp2009$y), type="s", col="grey40", xlab="ESCS", bty="n", yaxt="n", ylab="", lwd=2, main="Polska 2003 / 2009 / 2012", ylim=c(0,0.008))
 lines(dp2003$x, dp2003$y/sum(dp2003$y), type="s", col="grey", lwd=2)
 lines(dp2012$x, dp2012$y/sum(dp2012$y), type="s", col="black", lwd=2)
