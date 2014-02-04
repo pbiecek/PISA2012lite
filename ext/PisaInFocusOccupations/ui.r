@@ -3,7 +3,17 @@ shinyUI(pageWithSidebar(
 
   sidebarPanel(
     tags$head(
+<<<<<<< HEAD
       tags$link(rel="stylesheet", type="text/css", href="mojcss.css")
+=======
+      tags$link(rel="stylesheet", type="text/css", href="mojcss.css"),
+      tags$script("(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-5650686-6', 'icm.edu.pl');
+  ga('send', 'pageview');")
+>>>>>>> e2072bd5f9485ea4b3a2fe7c77a066fbcf12708a
     ),
     selectInput(inputId = "subject",
                 label = "1. Select the subject",
@@ -15,7 +25,11 @@ shinyUI(pageWithSidebar(
                 selected = "Germany"),
     conditionalPanel(
       condition="input.TabPanel == 'Trees'",
+<<<<<<< HEAD
       checkboxInput("showCI", "Show confidence intervals", TRUE)
+=======
+      checkboxInput("showCI", "Show standard errors", TRUE)
+>>>>>>> e2072bd5f9485ea4b3a2fe7c77a066fbcf12708a
     ),
     conditionalPanel(
       condition="(input.TabPanel == 'Two countries') | (input.TabPanel == 'Two countries level 2')",

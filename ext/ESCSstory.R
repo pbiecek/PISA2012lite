@@ -24,8 +24,8 @@ dg2012 <- density(student2012g$ESCS, weights=student2012g$W_FSTUWT, bw=.1, from=
 
 
 #
-#
 # graphs
+#
 
 
 
