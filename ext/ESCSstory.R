@@ -28,46 +28,46 @@ dg2012 <- density(student2012g$ESCS, weights=student2012g$W_FSTUWT, bw=.1, from=
 #
 
 
-png("POL2003.png", 720, 300)
+png("POL2003.png", 720, 350)
 par(mar=c(5,0,5,0))
 plot(dp2003$x, dp2003$y/sum(dp2003$y), type="s", col="black", xlab="ESCS", bty="n", yaxt="n", ylab="", lwd=2, main="Polska 2003")
 dev.off()
-png("POL2009.png", 720, 300)
+png("POL2009.png", 720, 350)
 par(mar=c(5,0,5,0))
 plot(dp2009$x, dp2009$y/sum(dp2009$y), type="s", col="black", xlab="ESCS", bty="n", yaxt="n", ylab="", lwd=2, main="Polska 2009")
 dev.off()
-png("POL2012.png", 720, 300)
+png("POL2012.png", 720, 350)
 par(mar=c(5,0,5,0))
 plot(dp2012$x, dp2012$y/sum(dp2012$y), type="s", col="black", xlab="ESCS", bty="n", yaxt="n", ylab="", lwd=2, main="Polska 2012")
 dev.off()
 
 
 
-png("POL2012.png", 720, 300)
+png("POL3.png", 720, 350)
 par(mar=c(5,0,5,0))
 plot(dp2009$x, dp2009$y/sum(dp2009$y), type="s", col="grey40", xlab="ESCS", bty="n", yaxt="n", ylab="", lwd=2, main="Polska 2003 / 2009 / 2012", ylim=c(0,0.008))
 lines(dp2003$x, dp2003$y/sum(dp2003$y), type="s", col="grey", lwd=2)
 lines(dp2012$x, dp2012$y/sum(dp2012$y), type="s", col="black", lwd=2)
-legend("topleft", c("2003", "2009", "2012"), col=c("grey40", "grey", "black"), lwd=3, bty="n")
+legend("topleft", c("2003", "2009", "2012"), col=c("grey", "grey40", "black"), lwd=3, bty="n")
+dev.off()
 
 
+png("DEU3.png", 720, 350)
+par(mar=c(5,0,5,0))
 plot(dg2009$x, dg2009$y/sum(dg2009$y), type="s", col="#aa000070", xlab="ESCS", bty="n", yaxt="n", ylab="", lwd=2, main="Niemcy 2003 / 2009 / 2012", ylim=c(0,0.006))
 lines(dg2003$x, dg2003$y/sum(dg2003$y), type="s", col="#aa000020", lwd=2)
 lines(dg2012$x, dg2012$y/sum(dg2012$y), type="s", col="#aa0000ff", lwd=2)
 legend("topleft", c("2003", "2009", "2012"), col=c("#aa000020", "#aa000070", "#aa0000ff"), lwd=3, bty="n")
+dev.off()
 
 
-
-plot(dp2009$x, dp2009$y/sum(dp2009$y), type="s", col="grey40", xlab="ESCS", bty="n", yaxt="n", ylab="", lwd=2, main="Polska 2003 / 2009 / 2012", ylim=c(0,0.008))
-lines(dp2003$x, dp2003$y/sum(dp2003$y), type="s", col="grey", lwd=2)
-lines(dp2012$x, dp2012$y/sum(dp2012$y), type="s", col="black", lwd=2)
-legend("topleft", c("2003", "2009", "2012"), col=c("grey40", "grey", "black"), lwd=3, bty="n")
-
-
+png("POLDEU.png", 720, 350)
 plot(dg2009$x, dg2009$y/sum(dg2009$y), type="s", col="#aa000070", xlab="ESCS", bty="n", yaxt="n", ylab="", lwd=2, main="Niemcy i Polska 2003 / 2009 / 2012", ylim=c(0,0.008))
 lines(dg2003$x, dg2003$y/sum(dg2003$y), type="s", col="#aa000020", lwd=2)
 lines(dg2012$x, dg2012$y/sum(dg2012$y), type="s", col="#aa0000ff", lwd=2)
 lines(dp2009$x, dp2009$y/sum(dp2009$y), type="s", col="grey40", lwd=2)
 lines(dp2003$x, dp2003$y/sum(dp2003$y), type="s", col="grey", lwd=2)
 lines(dp2012$x, dp2012$y/sum(dp2012$y), type="s", col="black", lwd=2)
+dev.off()
+
 
