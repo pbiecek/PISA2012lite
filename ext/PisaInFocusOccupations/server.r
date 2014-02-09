@@ -1,12 +1,13 @@
 ## server.r
 
 #setwd("/Users/pbiecek/camtasia/Dropbox/TJA Fellowship Biecek/reports/PISAinFocusSummaryApp/app/")
+#setwd("c:/_Przemek_/Dropbox/TJA Fellowship Biecek/reports/PISAinFocusSummaryApp/app")
 library(ggplot2)
 library(RColorBrewer)
 kol9 <- brewer.pal(n=9, name="RdYlBu")
 
 load("labels.rda")
-load("AllAvgSds.rda")
+load("AllAvgSdsDec.rda")
 minStudents = 30
 minSchools = 5
 
@@ -15,37 +16,56 @@ minSchools = 5
 shinyServer(function(input, output) {
   
   output$TwoCnts <- renderPlot({
+    inRange <- mean( AllAvgSds[[paste0(input$subject, "avg")]][input$variable,]  <= input$range[2] & AllAvgSds[[paste0(input$subject, "avg")]][input$variable,]  >= input$range[1], na.rm=TRUE)
+    
     levs1 <- nchar(colnames(AllAvgSds[[paste0(input$subject, "avg")]]))
     gr1 <- labels[levs1 == 1]; gr1[1] = input$variable
     gr2 <- labels[levs1 == 1]; gr2[1] = input$variable1
-    
-    print(plotSlopeHtree(val1 = AllAvgSds[[paste0(input$subject, "avg")]][input$variable,levs1 == 1], val2 = AllAvgSds[[paste0(input$subject, "avg")]][input$variable1,levs1 == 1],
+    pl <- plotSlopeHtree(val1 = AllAvgSds[[paste0(input$subject, "avg")]][input$variable,levs1 == 1], val2 = AllAvgSds[[paste0(input$subject, "avg")]][input$variable1,levs1 == 1],
                          gr1 = gr1, gr2 = gr1, 
                          lab1 = gr1, lab2 = gr2, 
                          col1 = factor(labels[levs1 == 1]), col2 = factor(labels[levs1 == 1]),
                          lev1 = c(1.5,rep(1,9)), lev2 = c(1.5,rep(1,9)),
-                         rang = input$range))
+                         rang = input$range)+ scale_size_continuous(range=c(5,10))
+    if (inRange < 0.01){
+      df <- data.frame()
+      pl <- ggplot(df) + geom_blank() + xlim(0, 10) + ylim(input$range[1], input$range[2]) + theme_bw()
+    }
+
+    if (inRange < 0.7)
+      pl <- pl + ggtitle("NOTE THAT MOST OF AVERAGES FALL OUTSIDE OF THIS PLOT!\n CHANGE THE VERTICAL AXIS ON THE LEFT PANEL!") + theme(plot.title=element_text(size=20))
     
+    print(pl)
     
+      
   }, height=800)
 
   output$TwoCnts2 <- renderPlot({
+    inRange <- mean( AllAvgSds[[paste0(input$subject, "avg")]][input$variable,]  <= input$range[2] & AllAvgSds[[paste0(input$subject, "avg")]][input$variable,]  >= input$range[1], na.rm=TRUE)
+    
     levs1 <- nchar(sapply(strsplit(labels, split=" "), '[', 1))
     gr1 <- labels; gr1[1] = input$variable
     gr2 <- labels; gr2[1] = input$variable1
+
+    pl<- plotSlopeHtree(val1 = AllAvgSds[[paste0(input$subject, "avg")]][input$variable,], val2 = AllAvgSds[[paste0(input$subject, "avg")]][input$variable1,],
+                        gr1 = gr1, gr2 = gr1, 
+                        lab1 = gr1, lab2 = gr2, 
+                        col1 = factor(substr(labels,1,1)), col2 = factor(substr(labels,1,1)),
+                        lev1 = (3-levs1)/2, lev2 = (3-levs1)/2,
+                        rang = input$range)+ scale_size_continuous(range=c(3.5,10))
     
-    print(plotSlopeHtree(val1 = AllAvgSds[[paste0(input$subject, "avg")]][input$variable,], val2 = AllAvgSds[[paste0(input$subject, "avg")]][input$variable1,],
-                         gr1 = gr1, gr2 = gr1, 
-                         lab1 = gr1, lab2 = gr2, 
-                         col1 = factor(substr(labels,1,1)), col2 = factor(substr(labels,1,1)),
-                         lev1 = (3-levs1)/2, lev2 = (3-levs1)/2,
-                         rang = input$range))
+    if (inRange < 0.01){
+      df <- data.frame()
+      pl <- ggplot(df) + geom_blank() + xlim(0, 10) + ylim(input$range[1], input$range[2]) + theme_bw()
+    }
+    if (inRange < 0.7)
+      pl <- pl + ggtitle("NOTE THAT MOST OF AVERAGES FALL OUTSIDE OF THIS PLOT!\n CHANGE THE VERTICAL AXIS ON THE LEFT PANEL!") + theme(plot.title=element_text(size=20))
+    
+    print(pl)
     
   }, height=800)
 
   output$Trees <- renderPlot({
-    names(AllAvgSds)[8] = "READsd"
-    
     eMeans <- AllAvgSds[[paste0(input$subject, "avg")]][input$variable,]
     eSd    <- AllAvgSds[[paste0(input$subject, "sd")]][input$variable,]
     eSize  <- AllAvgSds[["struct"]][input$variable,]
@@ -84,13 +104,15 @@ shinyServer(function(input, output) {
   output$DownloadZone <- renderText({
     cname <- gsub(input$variable, pattern="[^A-Za-z]", replacement="")
     
-    HTML(paste0("<a href='occupationsPISA2012.xlsx'>Here you can download data as Excel file,<br/><br/>",
+    HTML(paste0("<a href='occupationsPISA2012.xls'>Here you can download data as Excel file,<br/><br/>",
                 "<a href='OccupationsPISA2012.pdf'>Here you can download graphical one page country profiles.<br/><br/>"))
   })
 
   output$ColorTrees <- renderPlot({
+    inRange <- mean( AllAvgSds[[paste0(input$subject, "avg")]][input$variable,]  <= input$range[2] & AllAvgSds[[paste0(input$subject, "avg")]][input$variable,]  >= input$range[1], na.rm=TRUE)
+    
     flatHtree <- data.frame(
-      level = nchar(sapply(strsplit(labels, split=" "), '[', 1)),
+      level = c(0,0.4,1.9)[nchar(sapply(strsplit(labels, split=" "), '[', 1))+1],
       average = AllAvgSds[[paste0(input$subject, "avg")]][input$variable,],
       nameLong = sapply(sapply(strsplit(labels, split=" "), '[', -1), paste, collapse=" "),
       struct = AllAvgSds[["struct"]][input$variable,],
@@ -99,11 +121,20 @@ shinyServer(function(input, output) {
       color = factor(substr(labels, 1, 1)), stringsAsFactors = FALSE)
     flatHtree[1,3] = input$variable
     flatHtree <- flatHtree[flatHtree$studs >= 30 & flatHtree$schools >=5 , ]
-    
-    print(plotFlatHtree(flatHtree, 
+
+    pl <- plotFlatHtree(flatHtree, 
                         x = "level", y = "average", size = "struct", label="nameLong", color = "color",
-                        range = input$range) +
-            ggtitle(paste(input$subject, " in ",input$variable," broken down along ISCO structure")))
+                        range = input$range)+ scale_size_continuous(range=c(3.5,12))
+    
+    if (inRange < 0.01){
+      df <- data.frame()
+      pl <- ggplot(df) + geom_blank() + xlim(0, 10) + ylim(input$range[1], input$range[2]) + theme_bw()
+    }
+    
+    if (inRange < 0.7)
+      pl <- pl + ggtitle("NOTE THAT MOST OF AVERAGES FALL OUTSIDE OF THIS PLOT!\n CHANGE THE VERTICAL AXIS ON THE LEFT PANEL!") + theme(plot.title=element_text(size=20))
+    
+    print(pl)
   }, height=800)
 
   output$Map <- renderPlot({
@@ -130,7 +161,7 @@ shinyServer(function(input, output) {
 
 createExcelFiles <- function() {
   load("labels.rda")
-  load("AllAvgSds.rda")
+  load("AllAvgSdsDec.rda")
   
   labs <- sapply(strsplit(labels, split=" "), '[', 1)
   labs[1] <- "."
@@ -145,19 +176,19 @@ createExcelFiles <- function() {
     nams[1] <- "Country"
     
     colnames(AllAvgSdsN[[i]]) <- nams
-    AllAvgSdsN[[i]] <- AllAvgSdsN[[i]][order(rownames(AllAvgSdsN[[i]] )),]
+    AllAvgSdsN[[i]] <- AllAvgSdsN[[i]][order(rownames(AllAvgSdsN[[i]] )),][-4,] # remove austria due to lack of data
   }
   
   library("xlsx")
-  write.xlsx(AllAvgSdsN[[4]], file="occupationsPISA2012.xlsx", sheetName="MATH averages", append=FALSE, showNA=FALSE)
-  write.xlsx(AllAvgSdsN[[5]], file="occupationsPISA2012.xlsx", sheetName="READ averages", append=TRUE, showNA=FALSE)
-  write.xlsx(AllAvgSdsN[[6]], file="occupationsPISA2012.xlsx", sheetName="SCIE averages", append=TRUE, showNA=FALSE)
-  write.xlsx(AllAvgSdsN[[7]], file="occupationsPISA2012.xlsx", sheetName="MATH sd", append=TRUE, showNA=FALSE)
-  write.xlsx(AllAvgSdsN[[8]], file="occupationsPISA2012.xlsx", sheetName="READ sd", append=TRUE, showNA=FALSE)
-  write.xlsx(AllAvgSdsN[[9]], file="occupationsPISA2012.xlsx", sheetName="SCIE sd", append=TRUE, showNA=FALSE)
-  write.xlsx(AllAvgSdsN[[1]], file="occupationsPISA2012.xlsx", sheetName="population share", append=TRUE, showNA=FALSE)
-  write.xlsx(AllAvgSdsN[[2]], file="occupationsPISA2012.xlsx", sheetName="number of students", append=TRUE, showNA=FALSE)
-  write.xlsx(AllAvgSdsN[[3]], file="occupationsPISA2012.xlsx", sheetName="number od schools", append=TRUE, showNA=FALSE)
+  write.xlsx(AllAvgSdsN[[4]], file="occupationsPISA2012dec.xlsx", sheetName="MATH averages", append=FALSE, showNA=FALSE)
+  write.xlsx(AllAvgSdsN[[5]], file="occupationsPISA2012dec.xlsx", sheetName="READ averages", append=TRUE, showNA=FALSE)
+  write.xlsx(AllAvgSdsN[[6]], file="occupationsPISA2012dec.xlsx", sheetName="SCIE averages", append=TRUE, showNA=FALSE)
+  write.xlsx(AllAvgSdsN[[7]], file="occupationsPISA2012dec.xlsx", sheetName="MATH sd", append=TRUE, showNA=FALSE)
+  write.xlsx(AllAvgSdsN[[8]], file="occupationsPISA2012dec.xlsx", sheetName="READ sd", append=TRUE, showNA=FALSE)
+  write.xlsx(AllAvgSdsN[[9]], file="occupationsPISA2012dec.xlsx", sheetName="SCIE sd", append=TRUE, showNA=FALSE)
+  write.xlsx(AllAvgSdsN[[1]], file="occupationsPISA2012dec.xlsx", sheetName="population share", append=TRUE, showNA=FALSE)
+  write.xlsx(AllAvgSdsN[[2]], file="occupationsPISA2012dec.xlsx", sheetName="number of students", append=TRUE, showNA=FALSE)
+  write.xlsx(AllAvgSdsN[[3]], file="occupationsPISA2012dec.xlsx", sheetName="number od schools", append=TRUE, showNA=FALSE)
 }
 
 
@@ -168,7 +199,7 @@ createExcelFiles <- function() {
 plotFlatHtree <- function(flatHtree, x, y, size, label, color, range) {
   bp <- ggplot(aes_string(x = x, y = y, size = size, label=label, color = color), data=flatHtree)
   bp + geom_point() + theme_bw() +  scale_color_brewer(palette="RdYlBu") +
-    geom_text(size=4, hjust=0, vjust=0.5, x=flatHtree[,x] + 0.1) + 
+    geom_text(size=(2.8-sqrt(flatHtree[,x]))*2.8, hjust=0, vjust=0.5, x=0.1 + flatHtree[,x]) + 
     scale_x_continuous(limits = c(0, 3.2)) + 
     scale_y_continuous("", limits = c(range[1], range[2])) + 
     theme(plot.title = element_text(face="bold", size=14), 
@@ -193,7 +224,7 @@ plotSlopeHtree <- function(val1, val2, gr1, gr2, lab1, lab2, col1="black", col2=
     data.frame(cnt = 1, avg = val2, lab= lab2, color=col2, level=lev2, gr=gr2))
   
   ggplot(data = flatHtree, aes(x = cnt, y = avg, group=gr, color=color)) + 
-    geom_line() +
+    geom_line(lwd=2) +
     geom_text(aes(label = lab, x=cnt*1.4 - 0.2 , hjust = 1-cnt, size=level)) + 
     scale_size_continuous(range=c(3,7)) + 
     theme_bw()+
