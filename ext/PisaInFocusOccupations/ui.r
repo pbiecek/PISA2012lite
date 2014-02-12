@@ -1,4 +1,4 @@
-load("AllAvgSdsDec.rda")
+load("AllAvgSdsDec05.rda")
 cnnts <- sort(rownames(AllAvgSds[[1]]))[-4]
 
 shinyUI(pageWithSidebar(

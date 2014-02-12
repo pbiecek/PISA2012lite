@@ -6,8 +6,8 @@ library(ggplot2)
 library(RColorBrewer)
 kol9 <- brewer.pal(n=9, name="RdYlBu")
 
-load("labels.rda")
-load("AllAvgSdsDec.rda")
+load("labels05.rda")
+load("AllAvgSdsDec05.rda")
 minStudents = 30
 minSchools = 5
 
@@ -160,8 +160,8 @@ shinyServer(function(input, output) {
 
 
 createExcelFiles <- function() {
-  load("labels.rda")
-  load("AllAvgSdsDec.rda")
+  load("labels05.rda")
+  load("AllAvgSdsDec05.rda")
   
   labs <- sapply(strsplit(labels, split=" "), '[', 1)
   labs[1] <- "."
