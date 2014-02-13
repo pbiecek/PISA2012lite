@@ -186,7 +186,7 @@ createExcelFiles <- function() {
   write.xlsx(AllAvgSdsN[[7]], file="occupationsPISA2012dec.xlsx", sheetName="MATH sd", append=TRUE, showNA=FALSE)
   write.xlsx(AllAvgSdsN[[8]], file="occupationsPISA2012dec.xlsx", sheetName="READ sd", append=TRUE, showNA=FALSE)
   write.xlsx(AllAvgSdsN[[9]], file="occupationsPISA2012dec.xlsx", sheetName="SCIE sd", append=TRUE, showNA=FALSE)
-  write.xlsx(AllAvgSdsN[[1]], file="occupationsPISA2012dec.xlsx", sheetName="population share", append=TRUE, showNA=FALSE)
+  write.xlsx(AllAvgSdsN[[1]], file="occupationsPISA2012decC.xlsx", sheetName="population share", append=TRUE, showNA=FALSE)
   write.xlsx(AllAvgSdsN[[2]], file="occupationsPISA2012dec.xlsx", sheetName="number of students", append=TRUE, showNA=FALSE)
   write.xlsx(AllAvgSdsN[[3]], file="occupationsPISA2012dec.xlsx", sheetName="number od schools", append=TRUE, showNA=FALSE)
 }
