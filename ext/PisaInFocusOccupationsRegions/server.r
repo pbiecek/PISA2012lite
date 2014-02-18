@@ -12,8 +12,14 @@ load("regNames.rda")
 library(ggplot2)
 library(RColorBrewer)
 kol9 <- brewer.pal(n=9, name="RdYlBu")
+kol9 <- c("#a60C00", "#E63600", "#E67100", "#E6A700", "#46a604", "#00B6E6", "#00AAE6", "#008Dc6", "#0063a6")
+kol10 <- c("#777777", "#a60C00", "#E63600", "#E67100", "#E6A700", "#46a604", "#00B6E6", "#00AAE6", "#008Dc6", "#0063a6", "#000000")
 
 load("labels05.rda")
+labels[30] <- "6 Skilled agricultural, forestry and fishery workers"
+labels[33] <- "7 Craft and related trades workers"
+labels[40] <- "8 Plant and machine operators, and assemblers"
+
 load("AllAvgSdsDec05b_regions.rda")
 AllAvgSdsREG <- AllAvgSds
 load("AllAvgSdsDec05.rda")
@@ -77,12 +83,13 @@ shinyServer(function(input, output) {
     inRange <- mean( datasource[[paste0(isubject, "avg")]][cntName,]  <= input$range[2] & datasource[[paste0(isubject, "avg")]][cntName,]  >= input$range[1], na.rm=TRUE)
     
     levs1 <- nchar(colnames(datasource[[paste0(isubject, "avg")]]))
-    gr1 <- labels[levs1 == 1]; gr1[1] = cntNameS
-    gr2 <- labels[levs1 == 1]; gr2[1] = cntName2S
+    gr1 <- labels[levs1 == 1]; gr1[1] = paste0(" ",cntNameS)
+    gr2 <- labels[levs1 == 1]; gr2[1] = paste0(" ",cntName2S)
     pl <- plotSlopeHtree(val1 = datasource[[paste0(isubject, "avg")]][cntName,levs1 == 1], val2 = datasource2[[paste0(isubject, "avg")]][cntName2,levs1 == 1],
                          gr1 = gr1, gr2 = gr1, 
                          lab1 = gr1, lab2 = gr2, 
-                         col1 = factor(labels[levs1 == 1]), col2 = factor(labels[levs1 == 1]),
+                         col1 = factor(substr(labels,1,1)[levs1 == 1]), col2 = factor(substr(labels,1,1)[levs1 == 1]),
+#                         col1 = factor(labels[levs1 == 1]), col2 = factor(labels[levs1 == 1]),
                          lev1 = c(1.5,rep(1,9)), lev2 = c(1.5,rep(1,9)),
                          rang = input$range)+ scale_size_continuous(range=c(5,10))
     if (inRange < 0.01){
@@ -149,10 +156,10 @@ shinyServer(function(input, output) {
       }
     }
 
-    axis(3, 1, input$variable, las=2, cex.axis=0.95, col.axis="brown")
-    points(1, eMeans[1], pch=19, cex=sqrt(2*sqrt(eSize["."]/median(eSize, na.rm=TRUE))), col="brown")
+    axis(3, 1, input$variable, las=2, cex.axis=0.95, col.axis="#777777")
+    points(1, eMeans[1], pch=19, cex=sqrt(2*sqrt(eSize["."]/median(eSize, na.rm=TRUE))), col="#777777")
     if (input$showCI)
-      lines(c(1,1), eMeans["."] + c(-1,1)*eSd["."], col="brown")
+      lines(c(1,1), eMeans["."] + c(-1,1)*eSd["."], col="#777777")
     
     for (ii in seq_along(eMeans))
       if (nchar(names(eMeans)[ii]) > 1)
@@ -164,8 +171,10 @@ shinyServer(function(input, output) {
   output$DownloadZone <- renderText({
     cname <- gsub(input$variable, pattern="[^A-Za-z]", replacement="")
     
-    HTML(paste0("<br/><br/><a href='occupationsPISA2012.xls'>Here you can download data as Excel file,<br/><br/>",
-                "<a href='OccupationsPISA2012.pdf'>Here you can download graphical one page country profiles.<br/><br/>"))
+    HTML(paste0("<br/><br/>",
+                "<a href='http://www.oecd.org/pisa/pisaproducts/pisainfocus/PISA-in-Focus-n36-(eng)-FINAL.pdf'>Here you can download the Pisa In Focus article</a>,</br></br>",
+                "<a href='occupationsPISA2012.xls'>Here you can download data as Excel file</a>,<br/><br/>",
+                "<a href='OccupationsPISA2012.pdf'>Here you can download graphical one page country profiles</a>.<br/><br/>"))
   })
 
   output$ColorTrees <- renderPlot({
@@ -302,7 +311,9 @@ createExcelFiles <- function() {
 
 plotFlatHtree <- function(flatHtree, x, y, size, label, color, range) {
   bp <- ggplot(aes_string(x = x, y = y, size = size, label=label, color = color), data=flatHtree)
-  bp + geom_point() + theme_bw() +  scale_color_brewer(palette="RdYlBu") +
+  bp + geom_point() + theme_bw() +
+    scale_color_manual(values=kol10) +
+    #    scale_color_brewer(palette = "RdYlBu") + 
     geom_text(size=(2.8-sqrt(flatHtree[,x]))*2.8, hjust=0, vjust=0.5, x=0.1 + flatHtree[,x]) + 
     scale_x_continuous(limits = c(0, 3.2)) + 
     scale_y_continuous("", limits = c(range[1], range[2])) + 
@@ -332,7 +343,8 @@ plotSlopeHtree <- function(val1, val2, gr1, gr2, lab1, lab2, col1="black", col2=
     geom_text(aes(label = lab, x=cnt*1.4 - 0.2 , hjust = 1-cnt, size=level)) + 
     scale_size_continuous(range=c(3,7)) + 
     theme_bw()+
-    scale_color_brewer(palette = "RdYlBu") + 
+#    scale_color_brewer(palette = "RdYlBu") + 
+    scale_color_manual(values=kol10) + 
     scale_x_continuous("", limits = c(-3,4)) + 
     scale_y_continuous("", limits = rang) + 
     theme(plot.title = element_text(face = "bold", size = 14), 
