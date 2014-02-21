@@ -77,8 +77,11 @@ shinyUI(pageWithSidebar(
     
     HTML("<hr/>"),
     sliderInput("range", "Set range for vertical axis:",
-                min = 300, max = 700, value = c(475,575), step= 5),
-    HTML("<hr/>You can find more interesting results in our <a href='http://www.oecd.org/pisa/pisaproducts/pisainfocus/PISA-in-Focus-n36-(eng)-FINAL.pdf'>Pisa In Focus article</a> or in our download zone</br><hr>"),
+                min = 300, max = 700, value = c(475,580), step= 5),
+    HTML("<hr/>You can find more interesting results in our <a href='http://www.oecd.org/pisa/pisaproducts/pisainfocus/PISA-in-Focus-n36-(eng)-FINAL.pdf'>Pisa In Focus article</a>.<br/><br/>"),
+    
+    HTML("Here are country profiles <a href='OccupationsPISA2012.pdf'>as pdf file</a>, and raw data <a href='occupationsPISA2012.xls'>as Excel file</a>.<hr/>"),
+    
   HTML('<iframe src="//www.facebook.com/plugins/like.php?href=http%3A%2F%2Fbeta.icm.edu.pl%2FPISAoccupations2012%2F&amp;width=100&amp;layout=standard&amp;action=like&amp;show_faces=false&amp;share=true&amp;height=35&amp;appId=353845091367641" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:250px; height:50px;" allowTransparency="true"></iframe>'),
   HTML(paste('<a href="https://twitter.com/share" class="twitter-share-button" data-text="Compare occupations@PISA 2012, http://beta.icm.edu.pl/PISAoccupations2012/">Tweet</a>',
              "<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>"))),
@@ -86,12 +89,12 @@ shinyUI(pageWithSidebar(
       mainPanel(
         tabsetPanel(
           id = "TabPanel",
-          tabPanel("Rainbow plot", plotOutput("ColorTrees")),
-          tabPanel("Trees", plotOutput("Trees")),
-          tabPanel("Two countries", plotOutput("TwoCnts")),
-          tabPanel("Two countries level 2", plotOutput("TwoCnts2")),
-          tabPanel("Map of countries", plotOutput("Map")),
-          tabPanel("Download zone", htmlOutput("DownloadZone"))
+          tabPanel(HTML("<center>Rainbow plot <br> Single country</center>"), plotOutput("ColorTrees"), value='Rainbow plot'),
+          tabPanel(HTML("<center>Rainbow plot <br> Two countries</center>"), plotOutput("TwoCnts"), value="Two countries"),
+          tabPanel(HTML("<center>Detailed rainbow plot <br> Two countries</center>"), plotOutput("TwoCnts2"), value="Two countries level 2"),
+          tabPanel(HTML("<center>Occupation perspective <br>Single country</center>"), plotOutput("Trees"), value="Trees")
+#          tabPanel("Map of countries", plotOutput("Map")),
+#          tabPanel("Download zone", htmlOutput("DownloadZone"))
         )
     )
 ))

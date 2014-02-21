@@ -51,8 +51,9 @@ h1{
     line-height: 25px;
     padding-left: 20px;
 }
-.well{
-	border: 0px!important;
-    background-color: #f7f7f7;
-	padding-top: 3px!important;
+a{
+    background-color: transparent;
+}
+center{
+    background-color: transparent;
 }

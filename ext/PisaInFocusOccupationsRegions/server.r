@@ -17,7 +17,7 @@ kol10 <- c("#777777", "#a60C00", "#E63600", "#E67100", "#E6A700", "#46a604", "#0
 
 load("labels05.rda")
 labels[30] <- "6 Skilled agricultural, forestry and fishery workers"
-labels[33] <- "7 Craft and related trades workers"
+labels[34] <- "7 Craft and related trades workers"
 labels[40] <- "8 Plant and machine operators, and assemblers"
 
 load("AllAvgSdsDec05b_regions.rda")
@@ -27,6 +27,17 @@ minStudents = 30
 minSchools = 5
 
 #input = list(variable="Poland",variable1="Germany",subject="MATH",range=c(450,650))
+
+addSpace <- function(x, delta) {
+  orderOnThisLevel <- rev(order(x))
+  lastp <- x[orderOnThisLevel[1]]
+  for (tmpi in orderOnThisLevel[-1]) {
+    if (x[tmpi] > lastp - delta) 
+      x[tmpi] <- lastp - delta
+    lastp <- x[tmpi]
+  }
+  x
+}
 
 shinyServer(function(input, output) {
   
@@ -85,13 +96,22 @@ shinyServer(function(input, output) {
     levs1 <- nchar(colnames(datasource[[paste0(isubject, "avg")]]))
     gr1 <- labels[levs1 == 1]; gr1[1] = paste0(" ",cntNameS)
     gr2 <- labels[levs1 == 1]; gr2[1] = paste0(" ",cntName2S)
-    pl <- plotSlopeHtree(val1 = datasource[[paste0(isubject, "avg")]][cntName,levs1 == 1], val2 = datasource2[[paste0(isubject, "avg")]][cntName2,levs1 == 1],
+    val1 = datasource[[paste0(isubject, "avg")]][cntName,levs1 == 1]
+    val2 = datasource2[[paste0(isubject, "avg")]][cntName2,levs1 == 1]
+    val12 = val1
+    val22 = val2
+    delta <- diff(input$range)/100
+    
+    val12[2:length(val12)] <- addSpace(val12[2:length(val12)], delta*1.5)
+    val22[2:length(val22)] <- addSpace(val22[2:length(val22)], delta*1.5)
+    
+    pl <- plotSlopeHtree(val1 = val1, val2 = val2,
                          gr1 = gr1, gr2 = gr1, 
                          lab1 = gr1, lab2 = gr2, 
                          col1 = factor(substr(labels,1,1)[levs1 == 1]), col2 = factor(substr(labels,1,1)[levs1 == 1]),
-#                         col1 = factor(labels[levs1 == 1]), col2 = factor(labels[levs1 == 1]),
                          lev1 = c(1.5,rep(1,9)), lev2 = c(1.5,rep(1,9)),
-                         rang = input$range)+ scale_size_continuous(range=c(5,10))
+                         rang = input$range,
+                         val12 = val12, val22 = val22)+ scale_size_continuous(range=c(5,10))
     if (inRange < 0.01){
       df <- data.frame()
       pl <- ggplot(df) + geom_blank() + xlim(0, 10) + ylim(input$range[1], input$range[2]) + theme_bw()
@@ -113,12 +133,22 @@ shinyServer(function(input, output) {
     gr1 <- labels; gr1[1] = input$variable
     gr2 <- labels; gr2[1] = input$variable1
 
-    pl<- plotSlopeHtree(val1 = AllAvgSds[[paste0(isubject, "avg")]][input$variable,], val2 = AllAvgSds[[paste0(isubject, "avg")]][input$variable1,],
+    val1 =  AllAvgSds[[paste0(isubject, "avg")]][input$variable,]
+    val2 = AllAvgSds[[paste0(isubject, "avg")]][input$variable1,]
+    val12 = val1
+    val22 = val2
+    delta <- diff(input$range)/100
+    
+    val12[which(!is.na(val12))] <- addSpace(val12[which(!is.na(val12))], delta*1.5)
+    val22[which(!is.na(val22))] <- addSpace(val22[which(!is.na(val22))], delta*1.5)
+    
+    pl <- plotSlopeHtree(val1 =val1, val2 = val2,
                         gr1 = gr1, gr2 = gr1, 
                         lab1 = gr1, lab2 = gr2, 
                         col1 = factor(substr(labels,1,1)), col2 = factor(substr(labels,1,1)),
                         lev1 = (3-levs1)/2, lev2 = (3-levs1)/2,
-                        rang = input$range)+ scale_size_continuous(range=c(3.5,10))
+                        rang = input$range,
+                        val12 = val12, val22 = val22)+ scale_size_continuous(range=c(3.5,10))
     
     if (inRange < 0.01){
       df <- data.frame()
@@ -139,10 +169,11 @@ shinyServer(function(input, output) {
     eStud  <- AllAvgSds[["studs"]][input$variable,]
     eSchool <- AllAvgSds[["schools"]][input$variable,]
     
-    par(mar=c(1,10,20,10))
+#    par(mar=c(1,10,20,15))
+    par(omd=c(0.1,0.75,0.01,0.65), mar=c(0,0,0,0))
     plot(seq_along(eMeans), eMeans, pch=19, cex=2*sqrt(eSize/median(eSize, na.rm=TRUE)), las=1, xaxt="n", xlab="", ylab="", main="", type="n", ylim=input$range, yaxt="n")
     axis(2, las=1, seq(round(input$range[1],-1), input$range[2], 10))
-    axis(4, las=1, seq(round(input$range[1],-1), input$range[2], 10))
+    #axis(4, las=1, seq(round(input$range[1],-1), input$range[2], 10))
     abline(h=seq(round(input$range[1],-1), input$range[2], 20), col="grey", lty=3)
     for (i in 1:9) {
       tx <- grep(names(eMeans), pattern=paste("^", i, "[^0]", sep=""))
@@ -155,7 +186,9 @@ shinyServer(function(input, output) {
         }
       }
     }
-
+    
+    for (ii in 1:9)
+      axis(4, las=1, eMeans[paste(ii)], labels[grep(labels, pattern=paste0("^", ii, " "))], cex.axis=0.95, col.axis=kol9[ii])
     axis(3, 1, input$variable, las=2, cex.axis=0.95, col.axis="#777777")
     points(1, eMeans[1], pch=19, cex=sqrt(2*sqrt(eSize["."]/median(eSize, na.rm=TRUE))), col="#777777")
     if (input$showCI)
@@ -206,21 +239,28 @@ shinyServer(function(input, output) {
     isubject <- toupper(substr(input$subject,1,4))
     inRange <- mean( datasource[[paste0(isubject, "avg")]][cntName,]  <= input$range[2] & datasource[[paste0(isubject, "avg")]][cntName,]  >= input$range[1], na.rm=TRUE)
     
-    flatHtree <- data.frame(
+    flatHtree <- na.omit(data.frame(
       level = c(0,0.4,1.9)[nchar(sapply(strsplit(labels, split=" "), '[', 1))+1],
       average = datasource[[paste0(isubject, "avg")]][cntName,],
       nameLong = sapply(sapply(strsplit(labels, split=" "), '[', -1), paste, collapse=" "),
       struct = datasource[["struct"]][cntName,],
       studs = datasource[["studs"]][cntName,],
       schools = datasource[["schools"]][cntName,],
-      color = factor(substr(labels, 1, 1)), stringsAsFactors = FALSE)
+      color = factor(substr(labels, 1, 1)), stringsAsFactors = FALSE))
     flatHtree[1,3] = cntNameS
     flatHtree <- flatHtree[flatHtree$studs >= 30 & flatHtree$schools >=5 , ]
 
+    delta <- diff(input$range)/100
+    flatHtree$average2 <- flatHtree$average
+
+   # remove overlaps
+   flatHtree$average2[which(flatHtree$level == 0.4)] <- addSpace(flatHtree$average2[which(flatHtree$level == 0.4)], delta*1.9)
+   flatHtree$average2[which(flatHtree$level == 1.9)] <- addSpace(flatHtree$average2[which(flatHtree$level == 1.9)], delta*1.3)
+   
     pl <- plotFlatHtree(flatHtree, 
                         x = "level", y = "average", size = "struct", label="nameLong", color = "color",
-                        range = input$range)+ scale_size_continuous(range=c(3.5,12))
-    
+                        range = input$range, y2="average2") + scale_size_continuous(range=c(3.5,12)) 
+     
     if (inRange < 0.01){
       df <- data.frame()
       pl <- ggplot(df) + geom_blank() + xlim(0, 10) + ylim(input$range[1], input$range[2]) + theme_bw()
@@ -309,14 +349,17 @@ createExcelFiles <- function() {
 
 
 
-plotFlatHtree <- function(flatHtree, x, y, size, label, color, range) {
+plotFlatHtree <- function(flatHtree, x, y, size, label, color, range, y2) {
   bp <- ggplot(aes_string(x = x, y = y, size = size, label=label, color = color), data=flatHtree)
   bp + geom_point() + theme_bw() +
     scale_color_manual(values=kol10) +
     #    scale_color_brewer(palette = "RdYlBu") + 
-    geom_text(size=(2.8-sqrt(flatHtree[,x]))*2.8, hjust=0, vjust=0.5, x=0.1 + flatHtree[,x]) + 
+    geom_text(aes_string(y = y2),size=(2.8-sqrt(flatHtree[,x]))*2.8, hjust=0, vjust=0.5, x=0.1 + flatHtree[,x]) + 
     scale_x_continuous(limits = c(0, 3.2)) + 
     scale_y_continuous("", limits = c(range[1], range[2])) + 
+    geom_text(x=-0.1, y=range[2]+2, label="PISA score", size=6, colour="#777777", hjust=0, vjust=0.5) + 
+    geom_text(x=0.38, y=range[2]+2, label="Results by\nparents' major occupational groups", size=6, colour="#777777", hjust=0, vjust=0.5) + 
+    geom_text(x=1.88, y=range[2]+2, label="Results by\nparents' detailed occupational groups", size=6, colour="#777777", hjust=0, vjust=0.5)  + 
     theme(plot.title = element_text(face="bold", size=14), 
           axis.title.x = element_blank(),
           axis.ticks.x = element_blank(),
@@ -333,14 +376,14 @@ plotFlatHtree <- function(flatHtree, x, y, size, label, color, range) {
 }
 
 plotSlopeHtree <- function(val1, val2, gr1, gr2, lab1, lab2, col1="black", col2="black", 
-                           lev1=1, lev2=1, rang=range(c(val1, val2), na.rm=TRUE)) {
+                           lev1=1, lev2=1, rang=range(c(val1, val2), na.rm=TRUE), val12, val22) {
   flatHtree <- rbind(
-    data.frame(cnt = 0, avg = val1, lab= lab1, color=col1, level=lev1, gr=gr1),
-    data.frame(cnt = 1, avg = val2, lab= lab2, color=col2, level=lev2, gr=gr2))
+    data.frame(cnt = 0, avg = val1, lab= lab1, color=col1, level=lev1, gr=gr1, avg2=val12),
+    data.frame(cnt = 1, avg = val2, lab= lab2, color=col2, level=lev2, gr=gr2, avg2=val22))
   
   ggplot(data = flatHtree, aes(x = cnt, y = avg, group=gr, color=color)) + 
     geom_line(lwd=2) +
-    geom_text(aes(label = lab, x=cnt*1.4 - 0.2 , hjust = 1-cnt, size=level)) + 
+    geom_text(aes(label = lab, x=cnt*1.4 - 0.2 , hjust = 1-cnt, size=level, y=avg2)) + 
     scale_size_continuous(range=c(3,7)) + 
     theme_bw()+
 #    scale_color_brewer(palette = "RdYlBu") + 
