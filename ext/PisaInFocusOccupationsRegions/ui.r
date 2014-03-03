@@ -80,7 +80,7 @@ shinyUI(pageWithSidebar(
                 min = 300, max = 700, value = c(475,580), step= 5),
     HTML("<hr/>You can find more interesting results in our <a href='http://www.oecd.org/pisa/pisaproducts/pisainfocus/PISA-in-Focus-n36-(eng)-FINAL.pdf'>Pisa In Focus article</a>.<br/><br/>"),
     
-    HTML("Here are country profiles <a href='OccupationsPISA2012.pdf'>as pdf file</a>, and raw data <a href='occupationsPISA2012.xls'>as Excel file</a>and regional  data <a href='occupationsPISA2012decReg.xlsx'>as Excel file</a>.<hr/>"),
+    HTML("Here are country profiles <a href='OccupationsPISA2012.pdf'>as pdf file</a>, and raw data <a href='occupationsPISA2012.xls'>as Excel file</a> and regional  data <a href='occupationsPISA2012decReg.xlsx'>as Excel file</a>.<hr/>"),
     
   HTML('<iframe src="//www.facebook.com/plugins/like.php?href=http%3A%2F%2Fbeta.icm.edu.pl%2FPISAoccupations2012%2F&amp;width=100&amp;layout=standard&amp;action=like&amp;show_faces=false&amp;share=true&amp;height=35&amp;appId=353845091367641" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:250px; height:50px;" allowTransparency="true"></iframe>'),
   HTML(paste('<a href="https://twitter.com/share" class="twitter-share-button" data-text="Compare occupations@PISA 2012, http://beta.icm.edu.pl/PISAoccupations2012/">Tweet</a>',
