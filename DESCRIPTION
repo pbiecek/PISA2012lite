@@ -13,5 +13,3 @@ LazyLoad: yes
 LazyData: yes
 URL: http://pisa2012.acer.edu.au/
 Depends: R (>= 2.8.0)
-LinkingTo:
-Imports:
