@@ -1,6 +1,8 @@
 Programme for International Student Assessment 2012
 ===================================================
 
+[![DOI](https://zenodo.org/badge/13191/pbiecek/PISA2012lite.svg)](http://dx.doi.org/10.5281/zenodo.17866)
+
 This is an R package that aggregates data from PISA 2012.
 Be warned that the zip is about 300MB.
 
