@@ -25,5 +25,5 @@ library("PISA2012lite")
 ```
 Make sure you have [rtools](http://cran.r-project.org/bin/windows/Rtools/) installed on your computer.
 
-The examples how to use PISA2012lite package are avaliable here ....
+The examples how to use PISA2012lite package with intsvy package are avaliable here http://users.ox.ac.uk/~educ0279/
 
