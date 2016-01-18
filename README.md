@@ -13,13 +13,15 @@ The original dataset is avaliable here [http://pisa2012.acer.edu.au/downloads.ph
 You may be also interested in R packages PISA2000, PISA2003, PISA2006, PISA2009 with data from othere PISA releases.
 
 
-To get started, install the latest version of **PISA2012lite** from CRAN:
+To get started, install the latest version of **PISA2012lite** from GitHub:
 ```{Ruby}
 if (!require(devtools)) {
     install.packages("devtools")
     require(devtools)
 }
 install_github("pbiecek/PISA2012lite")
+# load it
+library("PISA2012lite")
 ```
 Make sure you have [rtools](http://cran.r-project.org/bin/windows/Rtools/) installed on your computer.
 
