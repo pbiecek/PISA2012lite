@@ -16,7 +16,7 @@
 \author{
  Dataset created by OECD, transformed by Przemyslaw Biecek
 }
-\seealso{\code{\link{school2009}}, \code{\link{item2009}}, \code{\link{parent2009}}}
+\seealso{\code{\link{school2012}}, \code{\link{item2012}}, \code{\link{parent2012}}}
 \examples{
 }
 \keyword{datasets}
