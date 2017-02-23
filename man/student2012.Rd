@@ -2,11 +2,11 @@
 \alias{student2012}
 \alias{student2012dict}
 \docType{data}
-\title{Data from student questionnaire PISA 2012}
+\title{Data from Student Questionnaire PISA 2012}
 \description{
   The english version of student questionnaire PISA 2012 is avaliable here \code{http://pisa2012.acer.edu.au/downloads/PISA12_Student_questionnaire.pdf}.
 
-  Not that this dataset is divided into two subsets: student2012OECD and student2012nonOECD in order to keep each database smaller than 100MB.
+  Note that this dataset does not contain replicate weights in order to keep the database smaller than 100MB. You will find replicate weights in the object student2012weights.
 
 }
 \usage{data(student2012)}

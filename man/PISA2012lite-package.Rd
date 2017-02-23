@@ -3,14 +3,14 @@
 \alias{PISA2012lite}
 \docType{package}
 \title{
-Set of datasets from PISA 2012 study
+Datasets from PISA 2012 Study
 }
 \description{
-This package aggregates datasets from PISA 2012 study. 
-The original dataset is avaliable here: \code{http://pisa2012.acer.edu.au/downloads.php}. 
+This package aggregates datasets from PISA 2012 study.
+The original dataset is avaliable here: \code{http://pisa2012.acer.edu.au/downloads.php}.
 It was converted into the R package to facilitate access for researchers familiar with R.
 
-The PISA2012lite package containes raw datasets avaliable on the PISA webpage. In the package PISA2012 you will find additional datasets, merged datasets, transformed variables, but be aware because it is a quite large package.
+The PISA2012lite package contains raw datasets available on the PISA webpage. In the package PISA2012 you will find additional datasets, merged datasets, transformed variables, but be aware because it is a quite large package.
 
 From wikipedia: The Programme for International Student Assessment (PISA) is a worldwide study by the Organisation for Economic Co-operation and Development (OECD) in member and non-member nations of 15-year-old school pupils' scholastic performance on mathematics, science, and reading. It was first performed in 2000 and then repeated every three years. It is done with view to improving education policies and outcomes. The data has increasingly been used both to assess the impact of education quality on incomes and growth and for understanding what causes differences in achievement across nations.
 }

@@ -2,7 +2,7 @@
 \alias{school2012}
 \alias{school2012dict}
 \docType{data}
-\title{Data from school questionnaire PISA 2012}
+\title{Data from School Questionnaire PISA 2012}
 \description{
   The english version of school questionnaire PISA 2012 is avaliable here \code{http://pisa2012.acer.edu.au/downloads/PISA12_School_questionnaire.pdf}.
 
