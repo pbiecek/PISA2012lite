@@ -1,6 +1,7 @@
 \name{student2012}
 \alias{student2012}
 \alias{student2012dict}
+\alias{student2012weights}
 \docType{data}
 \title{Data from Student Questionnaire PISA 2012}
 \description{
